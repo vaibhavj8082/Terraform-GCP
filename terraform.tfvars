@@ -1,3 +1,5 @@
-project_id = "<YOUR_PROJECT_ID>"
-region     = "us-central1"
-zone       = "us-central1-a"
+project_id    = "your-gcp-project-id"
+region        = "us-central1"
+zone          = "us-central1-a"
+instance_name = "jenkins-gcp-vm"
+machine_type  = "e2-medium"
