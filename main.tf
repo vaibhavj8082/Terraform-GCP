@@ -1,40 +1,26 @@
-# GCP Project ID where the VM will be created
-variable "project_id" { 
-  description = "GCP Project ID"
-  type        = string 
+provider "google" {
+  # Terraform will pick the credentials from GOOGLE_APPLICATION_CREDENTIALS
+  project = var.project_id
+  region  = var.region
+  zone    = var.zone
 }
 
-# GCP region (e.g., us-central1)
-variable "region" { 
-  description = "GCP region for resources"
-  type        = string
-  default     = "us-central1"
-}
+resource "google_compute_instance" "vm" {
+  name         = var.instance_name
+  machine_type = var.machine_type
+  zone         = var.zone
 
-# GCP zone (e.g., us-central1-a)
-variable "zone" { 
-  description = "GCP zone for resources"
-  type        = string
-  default     = "us-central1-a"
-}
+  boot_disk {
+    initialize_params {
+      image = var.boot_image
+      size  = 10  # Disk size in GB
+    }
+  }
 
-# VM instance name
-variable "instance_name" {
-  description = "Name of the VM to create in GCP"
-  type        = string
-  default     = "jenkins-gcp-vm"
-}
+  network_interface {
+    network       = "default"
+    access_config {}  # Assigns external IP
+  }
 
-# VM machine type (e.g., e2-medium)
-variable "machine_type" {
-  description = "GCP machine type"
-  type        = string
-  default     = "e2-medium"
-}
-
-# Boot disk image (e.g., Debian)
-variable "boot_image" {
-  description = "GCP boot disk image"
-  type        = string
-  default     = "debian-cloud/debian-11"
+  tags = ["jenkins-deployed"]
 }
